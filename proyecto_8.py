@@ -58,6 +58,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
+from sklearn.dummy import DummyClassifier
 
 
 # Cargar el conjunto de datos:
@@ -214,4 +215,43 @@ modelo con un clasificador ingenuo o aleatorio para asegurarse de que el modelo 
 '''
 
 
+'''
+ El modelo Random Forest con 50 estimadores ha demostrado un rendimiento sólido tanto en el conjunto de validación como en el conjunto de 
+ prueba, con una precisión de 0.7932 en el conjunto de prueba. Esto supera el umbral de 0.75 establecido como objetivo, lo que indica que el 
+ modelo es bastante confiable para recomendar los planes "Smart" y "Ultra".
+'''
 
+
+'''
+Prueba de cordura (sanity check)
+Una prueba de cordura es importante para asegurarnos de que el modelo es mejor que una predicción aleatoria o trivial. 
+Esto también nos ayuda a verificar si el modelo realmente ha aprendido patrones útiles de los datos.
+'''
+
+
+'''
+Podemos compararlo con un modelo ingenuo que siempre predice la clase más frecuente en el conjunto de datos.
+'''
+# Modelo ingenuo que predice siempre la clase más frecuente
+dummy_model = DummyClassifier(strategy='most_frequent')
+dummy_model.fit(features_train, target_train)
+
+
+# Predicciones y evaluación en el conjunto de prueba
+dummy_predictions = dummy_model.predict(features_test)
+dummy_accuracy = accuracy_score(target_test, dummy_predictions)
+print(f"Accuracy del modelo ingenuo: {dummy_accuracy:.4f}")
+
+
+'''
+También podemos usar un clasificador aleatorio, que asigna las etiquetas al azar y comparar su rendimiento con nuestro modelo.
+'''
+# Modelo que asigna etiquetas de forma aleatoria
+random_model = DummyClassifier(strategy='uniform')
+random_model.fit(features_train, target_train)
+
+
+# Predicciones y evaluación en el conjunto de prueba
+random_predictions = random_model.predict(features_test)
+random_accuracy = accuracy_score(target_test, random_predictions)
+print(f"Accuracy del modelo aleatorio: {random_accuracy:.4f}")
