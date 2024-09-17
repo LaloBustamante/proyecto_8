@@ -60,7 +60,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 # Cargar el conjunto de datos:
-df = pd.read_csv('/datasets/users_behavior.csv')
+df = pd.read_csv('datasets/users_behavior.csv')
 
 
 # Mostrar las primeras filas para tener una idea general de los datos
