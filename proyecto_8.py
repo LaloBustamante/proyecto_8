@@ -255,3 +255,11 @@ random_model.fit(features_train, target_train)
 random_predictions = random_model.predict(features_test)
 random_accuracy = accuracy_score(target_test, random_predictions)
 print(f"Accuracy del modelo aleatorio: {random_accuracy:.4f}")
+
+
+'''
+ Interpretación de resultados:
+Si el modelo de Random Forest tiene una precisión significativamente mayor que el modelo ingenuo o el modelo clasificador aleatorio, sabremos 
+que ha aprendido patrones útiles. Si los resultados son muy similares, podría significar que el modelo no está capturando bien las 
+diferencias entre las clases "Smart" y "Ultra".
+'''
