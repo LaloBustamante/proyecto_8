@@ -79,9 +79,17 @@ print(df.describe(), "\n")
 
 # Visualizar los datos
 # Histograma para las columnas numéricas
-df[['calls', 'minutes', 'messages', 'mb_used']].hist(bins=30, figsize=(10, 8))
-plt.show()
+#df[['calls', 'minutes', 'messages', 'mb_used']].hist(bins=30, figsize=(10, 8))
+#plt.show()
 
+# Visualizar los datos: Mostrar gráficos uno tras otro
+for column in ['calls', 'minutes', 'messages', 'mb_used']:
+    plt.figure()  # Crear una nueva figura para cada histograma
+    plt.hist(df[column], bins=30, edgecolor='black')
+    plt.title(f'Histograma de {column}')
+    plt.xlabel(column)
+    plt.ylabel('Frecuencia')
+    plt.show()
 
 '''
 El siguiente paso en el proyecto es segmentar los datos en un conjunto de entrenamiento, uno de validación y uno de prueba.
@@ -258,7 +266,7 @@ print(f"Accuracy del modelo aleatorio: {random_accuracy:.4f}")
 
 
 '''
- Interpretación de resultados:
+Interpretación de resultados:
 Si el modelo de Random Forest tiene una precisión significativamente mayor que el modelo ingenuo o el modelo clasificador aleatorio, sabremos 
 que ha aprendido patrones útiles. Si los resultados son muy similares, podría significar que el modelo no está capturando bien las 
 diferencias entre las clases "Smart" y "Ultra".
