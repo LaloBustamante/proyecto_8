@@ -59,23 +59,28 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
+
 # Cargar el conjunto de datos:
 df = pd.read_csv('datasets/users_behavior.csv')
 
 
 # Mostrar las primeras filas para tener una idea general de los datos
-print(df.head())
+print(df.head(), "\n")
+
 
 # Verificar información básica sobre los tipos de datos y valores faltantes
-print(df.info())
+print(df.info(), "\n")
+
 
 # Obtener un resumen estadístico de los datos
-print(df.describe())
+print(df.describe(), "\n")
+
 
 # Visualizar los datos
 # Histograma para las columnas numéricas
 df[['calls', 'minutes', 'messages', 'mb_used']].hist(bins=30, figsize=(10, 8))
 plt.show()
+
 
 '''
 El siguiente paso en el proyecto es segmentar los datos en un conjunto de entrenamiento, uno de validación y uno de prueba.
@@ -85,27 +90,33 @@ Conjunto de validación (validation set): Se usará para ajustar los hiperparám
 Conjunto de prueba (test set): Se usará al final para evaluar la calidad del modelo de forma objetiva.
 '''
 
+
 #  División de los datos en conjuntos de entrenamiento, validación y prueba
 
 # Definir las características (features) y el objetivo (target)
 features = df.drop(['is_ultra'], axis=1)
 target = df['is_ultra']
 
+
 # Dividir el dataset en conjunto de entrenamiento (60%) y conjunto de prueba (40%)
 features_train, features_temp, target_train, target_temp = train_test_split(features, target, test_size=0.4, random_state=12345)
+
 
 # Dividir el conjunto temporal (40%) en conjunto de validación (50% de los 40%) y conjunto de prueba (50% de los 40%)
 features_valid, features_test, target_valid, target_test = train_test_split(features_temp, target_temp, test_size=0.5, random_state=12345)
 
+
 # Verificar tamaños de los conjuntos
-print("Tamaño del conjunto de entrenamiento:", features_train.shape)
-print("Tamaño del conjunto de validación:", features_valid.shape)
-print("Tamaño del conjunto de prueba:", features_test.shape)
+print("Tamaño del conjunto de entrenamiento:", features_train.shape, "\n")
+print("Tamaño del conjunto de validación:", features_valid.shape, "\n")
+print("Tamaño del conjunto de prueba:", features_test.shape, "\n")
+
 
 '''
 Ahora con los datos segmentados, es posible empezar a entrenar diferentes modelos y evaluar su rendimiento utilizando el conjunto de 
 validación.
 '''
+
 
 '''
 El siguiente paso en el proyecto es investigar la calidad de diferentes modelos cambiando los hiperparámetros, y describir los hallazgos. 
@@ -119,6 +130,7 @@ Bosques aleatorios (Random Forests)
 Regresión logística (Logistic Regression)
 '''
 
+
 '''
 Árbol de Decisión (DecisionTreeClassifier):
 Aqui se itera sobre diferentes profundidades del árbol (max_depth) para encontrar el valor que maximice la precisión en el conjunto de 
@@ -130,7 +142,7 @@ for depth in range(1, 6):
     model_tree.fit(features_train, target_train)
     predictions_valid = model_tree.predict(features_valid)
     accuracy = accuracy_score(target_valid, predictions_valid)
-    print(f"Decision Tree (max_depth={depth}): accuracy = {accuracy:.4f}")
+    print(f"Decision Tree (max_depth={depth}): accuracy = {accuracy:.4f}", "\n")
 
 
 '''
@@ -144,7 +156,7 @@ for estimators in [10, 50, 100]:
     model_forest.fit(features_train, target_train)
     predictions_valid = model_forest.predict(features_valid)
     accuracy = accuracy_score(target_valid, predictions_valid)
-    print(f"Random Forest (n_estimators={estimators}): accuracy = {accuracy:.4f}")
+    print(f"Random Forest (n_estimators={estimators}): accuracy = {accuracy:.4f}", "\n")
 
 
 '''
@@ -156,8 +168,50 @@ model_logistic = LogisticRegression(random_state=12345, max_iter=1000)
 model_logistic.fit(features_train, target_train)
 predictions_valid = model_logistic.predict(features_valid)
 accuracy = accuracy_score(target_valid, predictions_valid)
-print(f"Logistic Regression: accuracy = {accuracy:.4f}")
+print(f"Logistic Regression: accuracy = {accuracy:.4f}", "\n")
 
+
+'''
+A partir de los resultados obtenidos, se puede ver que el Bosque Aleatorio con 50 estimadores es el modelo que obtuvo la mejor precisión en el 
+conjunto de validación con un valor de 0.7916. Ahora que ya se ha identificado el mejor modelo, el siguiente paso es verificar su rendimiento 
+con el conjunto de prueba.
+'''
+
+
+'''
+Probar el modelo en el conjunto de prueba:
+Se requiere utilizar el modelo de Random Forest con 50 estimadores en el conjunto de prueba para verificar su precisión final. Este paso es 
+fundamental porque permite evaluar el rendimiento real del modelo con datos que no ha visto durante el entrenamiento ni la validación.
+'''
+
+
+# Entrenamos el mejor modelo con el conjunto de entrenamiento completo
+best_model = RandomForestClassifier(n_estimators=50, random_state=12345)
+best_model.fit(features_train, target_train)
+
+
+# Realizamos predicciones con el conjunto de prueba
+predictions_test = best_model.predict(features_test)
+
+
+# Evaluamos la precisión del modelo en el conjunto de prueba
+test_accuracy = accuracy_score(target_test, predictions_test)
+print(f"Accuracy en el conjunto de prueba: {test_accuracy:.4f}", "\n")
+
+
+'''
+Análisis del resultado
+Después de ejecutar el código, el modelo proporciona una precisión sobre el conjunto de prueba, que es una medida crucial para determinar si 
+cumple con el umbral de 0.75 de exactitud.
+
+Ya que el valor de test_accuracy es superior a 0.75, podemos concluir que el modelo es adecuado para su uso. Si no, podríamos intentar mejorar 
+el rendimiento ajustando más los hiperparámetros o explorando otras técnicas de machine learning.
+'''
+
+'''
+Una vez verificado el rendimiento en el conjunto de prueba, se procede a realizar una prueba de cordura (sanity check), donde se compara el 
+modelo con un clasificador ingenuo o aleatorio para asegurarse de que el modelo es mejor que una predicción trivial.
+'''
 
 
 
