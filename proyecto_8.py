@@ -263,3 +263,46 @@ Si el modelo de Random Forest tiene una precisión significativamente mayor que 
 que ha aprendido patrones útiles. Si los resultados son muy similares, podría significar que el modelo no está capturando bien las 
 diferencias entre las clases "Smart" y "Ultra".
 '''
+
+
+'''
+Descripción del proyecto:
+El objetivo del proyecto es desarrollar un modelo de clasificación para recomendar el mejor plan de Megaline (Smart o Ultra) a los clientes en 
+función de su comportamiento de uso (llamadas, minutos, mensajes y datos de Internet).
+
+2. División de los datos:
+Se dividió los datos en tres conjuntos:
+
+Conjunto de entrenamiento: 1928 observaciones
+Conjunto de validación: 643 observaciones
+Conjunto de prueba: 643 observaciones
+
+3. Modelos entrenados:
+Se ha entrenado y evaluado los siguientes modelos:
+
+Árbol de decisión con diferentes profundidades (max_depth de 1 a 5):
+La mayor precisión se obtuvo con una profundidad de 3, con una precisión del 0.7854 en el conjunto de validación.
+
+Random Forest con diferentes números de estimadores:
+El modelo con 50 estimadores obtuvo la mayor precisión, 0.7916 en el conjunto de validación y 0.7932 en el conjunto de prueba.
+
+Regresión Logística:
+Este modelo tuvo una precisión de 0.7107 en el conjunto de validación, lo que no supera a los modelos basados en árboles de decisión.
+
+4. Prueba en el conjunto de prueba:
+El modelo Random Forest con 50 estimadores fue probado en el conjunto de prueba y logró una precisión de 0.7932, superando el umbral de 0.75 
+establecido para el proyecto.
+
+5. Prueba de cordura:
+Para verificar que el modelo tiene valor predictivo, se realizó una prueba de cordura:
+
+Modelo ingenuo (predicción de la clase más frecuente): Obtuvo una precisión de 0.6843, lo que indica que nuestro modelo de Random Forest es 
+considerablemente mejor.
+
+Clasificador aleatorio: Obtuvo una precisión de 0.4977, lo que es cercano a un modelo de predicción completamente aleatoria.
+
+6. Conclusión:
+El modelo Random Forest con 50 estimadores fue el mejor modelo, superando tanto al modelo ingenuo como al clasificador aleatorio, con una 
+precisión en el conjunto de prueba de 0.7932. Este modelo es confiable para predecir qué plan recomendar a los clientes basándose en su 
+comportamiento.
+'''
